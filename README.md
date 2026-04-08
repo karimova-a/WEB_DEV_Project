@@ -1,16 +1,12 @@
 # WEB_DEV_Project
----
+# Moodflix - Movies by Mood
 
-# 🎬 MoodFlix — Movies by Mood
-
-## 👥 Team Members
+#Team Members
 * Karimova Aigerim, ID: 24B031834
 * Kaldanova Lina, ID: 24B031829
 * Baktygerey Kamshat, ID: 24B031679
 
----
-
-## 📌 Project Description
+#Project Description
 
 **MoodFlix** is a web application that helps users discover and track movies based on their mood.
 
@@ -24,9 +20,7 @@ The system provides functionality for:
 
 This project is developed as part of the Web Development course using **Angular** for the frontend and **Django REST Framework** for the backend.
 
----
-
-## 🎯 Project Goals
+#Project Goals
 
 The main goal of this project is to build a full-stack web application that demonstrates:
 
@@ -36,62 +30,47 @@ The main goal of this project is to build a full-stack web application that demo
 * Mood-based recommendation logic
 * Clean and user-friendly UI
 
----
 
-## ⚙️ Tech Stack
+# Tech Stack
 
-### Frontend
-
+#Frontend
 * Angular 17+ (TypeScript)
 * HTML, CSS
 * Angular Router
 * HttpClient
 
-### Backend
-
+#Backend
 * Django
 * Django REST Framework (DRF)
 
-### Database
-
+#Database
 * SQLite (development)
 * PostgreSQL (optional)
 
-### Authentication
-
+#Authentication
 * JWT (JSON Web Token)
+  
+Planned Features
 
----
-
-## 🚀 Planned Features
-
-### 🔐 Authentication
-
+#Authentication
 * User registration
 * User login/logout
 * JWT-based authentication
 
----
-
-### 🎬 Movies
-
+#Movies
 * Add new movies
 * View list of movies
 * View movie details
 * Update movie data
 * Delete movies
-
----
-
-### ⭐ Reviews
+  
+#Reviews
 
 * Add review for a movie
 * Rate movies (1–5 stars)
 * View all reviews
 
----
-
-### 📌 Watchlist
+#Watchlist
 
 * Add movies to watchlist
 * Track status:
@@ -100,26 +79,19 @@ The main goal of this project is to build a full-stack web application that demo
   * watching
   * completed
 
----
-
-### 😊 Mood System (Main Feature)
+#Mood System (Main Feature)
 
 * Select current mood (happy, sad, excited, chill, romantic)
 * Get recommended movies based on mood
 * Save mood history
+  
+# API Endpoints (Planned)
 
----
-
-## 🔗 API Endpoints (Planned)
-
-### Authentication
-
+#Authentication
 * POST /api/register/
 * POST /api/login/
-
----
-
-### Movies
+  
+#Movies
 
 * GET /api/movies/
 * POST /api/movies/
@@ -127,38 +99,28 @@ The main goal of this project is to build a full-stack web application that demo
 * PUT /api/movies/{id}/
 * DELETE /api/movies/{id}/
 
----
-
-### Reviews
+# Reviews
 
 * GET /api/reviews/
 * POST /api/reviews/
-
----
-
-### Watchlist
+  
+#Watchlist
 
 * GET /api/watchlist/
 * POST /api/watchlist/
 
----
-
-### Mood
+# Mood
 
 * GET /api/moods/
 * POST /api/moods/
 * GET /api/recommendations/?mood=happy
 
----
-## 📎 Repository Link
+#Repository Link
 
-👉https://github.com/karimova-a/WEB_DEV_Project
+https://github.com/karimova-a/WEB_DEV_Project
 
----
+Simple idea:
 
-👉 Simple idea:
+“You don’t choose a movie - your mood chooses it.”
 
-> “You don’t choose a movie — your mood chooses it.”
-
----
 
