@@ -5,6 +5,7 @@
 #Project Overview
 
 **MoodFlix** is a full-stack web application that helps users discover, track, and review movies based on their mood. The system allows users to select their current mood and instantly receive personalized movie recommendations. Users can manage their watchlist, rate movies, write reviews, and interact with friends.
+
 #Team Members
 
 * **Karimova Aigerim** — ID: 24B031834
