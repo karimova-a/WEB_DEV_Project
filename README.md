@@ -4,7 +4,7 @@
 # 🎬 MoodFlix — Movies by Mood
 
 ## 👥 Team Members
-* Karimova Aigerim, ID: 24B31834
+* Karimova Aigerim, ID: 24B031834
 * Kaldanova Lina, ID: 24B031829
 * Baktygerey Kamshat, ID: 24B031679
 
