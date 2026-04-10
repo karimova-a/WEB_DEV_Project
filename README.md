@@ -109,7 +109,8 @@ The main goal of this project is to build a full-stack web application that demo
 * Login with JWT token
 
 * Optional login directly from the homepage
-* 
+
+  
 # Social Features
 
 * "What your friends are watching" block
