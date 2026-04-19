@@ -23,7 +23,7 @@ MOOD_TO_GENRES = {
     'calm': ['Documentary', 'Indie', 'Drama'],
 }
 
-# ========== Function-Based Views (2+) ==========
+#  Function-Based Views 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -75,5 +75,147 @@ def genre_list_view(request):
     genres = Genre.objects.all()
     return Response(GenreSerializer(genres, many=True).data)
 
+
+# Class-Based Views 
+
+class MovieListCreateView(APIView):
+    """CBV 1: List all movies or create a new movie"""
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        genre = request.query_params.get('genre')
+        search = request.query_params.get('search')
+        mood = request.query_params.get('mood')
+
+        movies = Movie.objects.all().order_by('-created_at')
+
+        if genre:
+            movies = movies.filter(genre__name__icontains=genre)
+        if search:
+            movies = movies.filter(title__icontains=search)
+        if mood:
+            genre_names = MOOD_TO_GENRES.get(mood, [])
+            movies = movies.filter(genre__name__in=genre_names)
+
+        serializer = MovieSerializer(movies, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = MovieSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MovieDetailView(APIView):
+    """CBV 2: Retrieve, update, or delete a movie"""
+    permission_classes = [AllowAny]
+
+    def get_object(self, pk):
+        try:
+            return Movie.objects.get(pk=pk)
+        except Movie.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        movie = self.get_object(pk)
+        if not movie:
+            return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = MovieSerializer(movie)
+        data = serializer.data
+        
+        reviews = WatchlistItem.objects.filter(movie=movie, review__gt='').order_by('-updated_at')[:10]
+        data['reviews'] = WatchlistItemSerializer(reviews, many=True).data
+        return Response(data)
+
+    def put(self, request, pk):
+        movie = self.get_object(pk)
+        if not movie:
+            return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = MovieSerializer(movie, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        movie = self.get_object(pk)
+        if not movie:
+            return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
+        movie.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class WatchlistView(APIView):
+    """CBV 3: User watchlist management"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        status_filter = request.query_params.get('status')
+        items = WatchlistItem.objects.filter(user=request.user).order_by('-updated_at')
+        if status_filter:
+            items = items.filter(status=status_filter)
+        serializer = WatchlistItemSerializer(items, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = WatchlistItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WatchlistItemDetailView(APIView):
+    """CBV 4: Update or delete a watchlist item"""
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk):
+        try:
+            item = WatchlistItem.objects.get(pk=pk, user=request.user)
+        except WatchlistItem.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = WatchlistItemSerializer(item, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            item = WatchlistItem.objects.get(pk=pk, user=request.user)
+        except WatchlistItem.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MoodEntryListView(APIView):
+    """CBV 5: List mood entries for authenticated user"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        entries = MoodEntry.objects.filter(user=request.user).order_by('-created_at')[:30]
+        serializer = MoodEntrySerializer(entries, many=True)
+        return Response(serializer.data)
+
+
+class UserProfileView(APIView):
+    """CBV 6: Get/update user profile"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)
+
+    def put(self, request):
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
