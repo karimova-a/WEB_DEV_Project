@@ -219,3 +219,128 @@ class UserProfileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Friends Features 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def search_users_view(request):
+    """FBV: Search users to follow"""
+    query = request.query_params.get('q', '')
+    if len(query) < 2:
+        return Response([])
+    users = User.objects.filter(username__icontains=query).exclude(id=request.user.id)[:10]
+    my_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    following_ids = list(my_profile.following.values_list('user_id', flat=True))
+    results = []
+    for u in users:
+        profile, _ = UserProfile.objects.get_or_create(user=u)
+        results.append({
+            'id': u.id,
+            'username': u.username,
+            'avatar': profile.avatar,
+            'is_following': u.id in following_ids,
+        })
+    return Response(results)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def follow_user_view(request):
+    """FBV: Follow a user"""
+    user_id = request.data.get('user_id')
+    if not user_id or int(user_id) == request.user.id:
+        return Response({'error': 'Invalid user'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        target_user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    my_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    target_profile, _ = UserProfile.objects.get_or_create(user=target_user)
+    my_profile.following.add(target_profile)
+    return Response({'message': f'Now following {target_user.username}'})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def unfollow_user_view(request):
+    """FBV: Unfollow a user"""
+    user_id = request.data.get('user_id')
+    if not user_id:
+        return Response({'error': 'Invalid user'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        target_user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    my_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    target_profile, _ = UserProfile.objects.get_or_create(user=target_user)
+    my_profile.following.remove(target_profile)
+    return Response({'message': f'Unfollowed {target_user.username}'})
+
+
+class FriendsActivityView(APIView):
+    """CBV: Get activity feed from followed users"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        my_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        following_user_ids = list(my_profile.following.values_list('user_id', flat=True))
+
+        # Get recent watchlist activity from friends
+        activities = WatchlistItem.objects.filter(
+            user_id__in=following_user_ids
+        ).select_related('user', 'movie', 'movie__genre').order_by('-updated_at')[:20]
+
+        result = []
+        for item in activities:
+            action = 'added to planned'
+            if item.status == 'watching':
+                action = 'started watching'
+            elif item.status == 'completed':
+                action = 'completed'
+            if item.user_rating:
+                action = f'rated {item.user_rating}★'
+            if item.review:
+                action = 'wrote a review for'
+
+            result.append({
+                'id': item.id,
+                'username': item.user.username,
+                'action': action,
+                'movie': MovieSerializer(item.movie).data,
+                'review': item.review if item.review else None,
+                'rating': item.user_rating,
+                'timestamp': item.updated_at,
+            })
+
+        return Response(result)
+
+
+class FollowingListView(APIView):
+    """CBV: Get list of users I follow and my followers"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        my_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+
+        following = []
+        for p in my_profile.following.select_related('user').all():
+            following.append({
+                'id': p.user.id,
+                'username': p.user.username,
+                'avatar': p.avatar,
+            })
+
+        followers = []
+        for p in my_profile.followers.select_related('user').all():
+            followers.append({
+                'id': p.user.id,
+                'username': p.user.username,
+                'avatar': p.avatar,
+            })
+
+        return Response({
+            'following': following,
+            'followers': followers,
+        })
+        
+        
