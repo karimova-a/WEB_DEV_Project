@@ -3,6 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 
 urlpatterns = [
+    
     # Auth (JWT)
     path('register/', views.register_view, name='register'),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -21,3 +22,18 @@ urlpatterns = [
      # Watchlist (CBV)
     path('watchlist/', views.WatchlistView.as_view(), name='watchlist'),
     path('watchlist/<int:pk>/', views.WatchlistItemDetailView.as_view(), name='watchlist-detail'),
+    
+    # Mood entries (CBV)
+    path('mood/entries/', views.MoodEntryListView.as_view(), name='mood-entries'),
+    
+    # Profile (CBV)
+    path('profile/', views.UserProfileView.as_view(), name='profile'),
+    
+    # Friends / Social (FBV + CBV)
+    path('users/search/', views.search_users_view, name='user-search'),
+    path('users/follow/', views.follow_user_view, name='follow-user'),
+    path('users/unfollow/', views.unfollow_user_view, name='unfollow-user'),
+    path('friends/activity/', views.FriendsActivityView.as_view(), name='friends-activity'),
+    path('friends/list/', views.FollowingListView.as_view(), name='friends-list'),
+
+]
