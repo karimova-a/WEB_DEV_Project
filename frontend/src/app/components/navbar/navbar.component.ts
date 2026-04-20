@@ -114,3 +114,4 @@ export class NavbarComponent {
     this.router.navigate(['/']);
   }
 }
+/* Navbar component - Lina */
