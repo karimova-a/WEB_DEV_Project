@@ -77,6 +77,7 @@ import { Router } from '@angular/router';
     .msg { color: #4caf50; text-align: center; margin-top: 0.8rem; }
   `]
 })
+
 export class ProfileComponent implements OnInit {
   private api = inject(ApiService);
   profile: UserProfile | null = null;
