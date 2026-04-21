@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
     <nav class="navbar">
       <a routerLink="/" class="logo">
         <span class="logo-icon"></span>
-        <span class="logo-text">Moodlfix</span>
+        <span class="logo-text">MoodFlix</span>
       </a>
       <div class="nav-links">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>

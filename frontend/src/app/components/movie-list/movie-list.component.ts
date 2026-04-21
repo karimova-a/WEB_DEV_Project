@@ -76,10 +76,16 @@ import { ApiService, Movie } from '../../services/api.service';
     }
     .movie-card { text-decoration: none; color: #fff; transition: transform 0.3s; }
     .movie-card:hover { transform: translateY(-8px); }
+    .poster { width: 100%; height: 100%; object-fit: contain; background: #0a0a1a; }
     .poster-wrap {
       position: relative; border-radius: 12px; overflow: hidden;
       aspect-ratio: 2/3; background: rgba(255,255,255,0.05);
     }
+    .poster-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 0.8rem; display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+}
     .rating { font-size: 0.85rem; font-weight: 600; }
     .genre-tag {
       font-size:0.7rem; background: rgba(255,210,0,0.2);
