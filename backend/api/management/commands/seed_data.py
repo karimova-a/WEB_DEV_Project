@@ -77,7 +77,7 @@ class Command(BaseCommand):
             ),
             (
                 'Amelie',
-                'https://m.media-amazon.com/images/M/MV5BNDg4NjM1YjMtYmNhZC00MjM0LWFiZmYtNGY1OGRjZWRlMjQ2XkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_SX300.jpg',
+                'https://m.media-amazon.com/images/I/71R2SUKOUBL._AC_UF1000,1000_QL80_.jpg',
                 '2001-04-25', 8.3, 'Comedy',
                 'Amelie is an innocent and naive girl in Paris with her own sense of justice.',
                 'https://www.youtube.com/embed/Py7cDXQae2U',
