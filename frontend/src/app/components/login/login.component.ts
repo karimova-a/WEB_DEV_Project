@@ -4,36 +4,31 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-login',
   standalone: true,
   imports: [FormsModule, RouterLink],
   template: `
     <div class="auth-page">
       <div class="auth-card">
-        <h1 class="auth-title">Join MoodFlix</h1>
-        <p class="auth-sub">Create your account and start discovering movies</p>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-sub">Log in to your MoodFlix account</p>
 
         <div class="form-group">
           <label>Username</label>
-          <input type="text" [(ngModel)]="username" placeholder="Choose a username" class="input" />
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" [(ngModel)]="email" placeholder="your@email.com" class="input" />
+          <input type="text" [(ngModel)]="username" placeholder="Enter username" class="input" />
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" [(ngModel)]="password" placeholder="Min 6 characters" class="input" />
+          <input type="password" [(ngModel)]="password" placeholder="Enter password" class="input" />
         </div>
 
         @if (error) { <p class="error">{{ error }}</p> }
-        @if (success) { <p class="success">{{ success }}</p> }
 
-        <button class="btn-primary" (click)="onRegister()" [disabled]="loading">
-          {{ loading ? 'Creating...' : 'Register' }}
+        <button class="btn-primary" (click)="onLogin()" [disabled]="loading">
+          {{ loading ? 'Logging in...' : 'Login' }}
         </button>
 
-        <p class="switch-link">Already have an account? <a routerLink="/login">Login</a></p>
+        <p class="switch-link">Don't have an account? <a routerLink="/register">Register</a></p>
       </div>
     </div>
   `,
@@ -73,8 +68,7 @@ import { AuthService } from '../../services/auth.service';
     }
     .input:focus { border-color: #ffd200; }
     .error { color: #ff6b6b; text-align: center; margin-bottom: 1rem; font-size: 0.9rem; }
-    .success { color: #4caf50; text-align: center; margin-bottom: 1rem; font-size: 0.9rem; }
-     .btn-primary {
+    .btn-primary {
       width: 100%; background: linear-gradient(135deg, #f7971e, #ffd200);
       border: none; color: #0f0c29; padding: 0.9rem; border-radius: 10px;
       font-weight: 700; cursor: pointer; font-size: 1rem; margin-top: 0.5rem;
@@ -88,31 +82,21 @@ import { AuthService } from '../../services/auth.service';
   `]
 })
 
-export class RegisterComponent {
+export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
   username = '';
-  email = '';
   password = '';
   error = '';
-  success = '';
   loading = false;
 
-  onRegister() {
+  onLogin() {
     this.error = '';
-    this.success = '';
-    if (this.password.length < 6) { this.error = 'Password must be at least 6 characters'; return; }
     this.loading = true;
-    this.auth.register(this.username, this.email, this.password).subscribe({
-      next: () => {
-        this.success = 'Account created! Redirecting to login...';
-        setTimeout(() => this.router.navigate(['/login']), 1500);
-      },
-      error: (e) => {
-        this.error = e.error?.username?.[0] || e.error?.email?.[0] || 'Registration failed';
-        this.loading = false;
-      }
+    this.auth.login(this.username, this.password).subscribe({
+      next: () => { this.router.navigate(['/']); },
+      error: () => { this.error = 'Invalid username or password'; this.loading = false; }
     });
   }
 }

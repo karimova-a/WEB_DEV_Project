@@ -91,7 +91,7 @@ import { ApiService, Movie } from '../../services/api.service';
     .empty {text-align: center; color: rgba(255,255,255,0.5); padding: 3rem;}
   `]
 })
-export class MoviesListComponent implements OnInit {
+export class MovieListComponent implements OnInit {
   private api = inject(ApiService);
   movies: Movie[] = [];
   genres: any[] = [];
