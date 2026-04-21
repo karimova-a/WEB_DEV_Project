@@ -1,12 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Times New Roman', Times, serif !important;
   background: #0f0c29;
   color: #fff;
   -webkit-font-smoothing: antialiased;
+}
+
+* {
+  font-family: 'Times New Roman', Times, serif !important;
 }
 
 ::-webkit-scrollbar { width: 8px; }
