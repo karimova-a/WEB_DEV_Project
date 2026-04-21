@@ -77,3 +77,20 @@ import { Router } from '@angular/router';
     .msg { color: #4caf50; text-align: center; margin-top: 0.8rem; }
   `]
 })
+export class ProfileComponent implements OnInit {
+  private api = inject(ApiService);
+  profile: UserProfile | null = null;
+  message = '';
+
+  ngOnInit() {
+    this.api.getProfile().subscribe(p => this.profile = p);
+  }
+
+  saveProfile() {
+    if (!this.profile) return;
+    this.api.updateProfile({ preferred_genres: this.profile.preferred_genres }).subscribe({
+      next: () => this.message = 'Profile updated!',
+      error: () => this.message = 'Error saving profile'
+    });
+  }
+}

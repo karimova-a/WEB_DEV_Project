@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service.ts';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -47,23 +47,23 @@ import { AuthService } from '../../services/auth.service.ts';
       background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
       border-radius: 20px; padding: 2.5rem;
     }
-    .auth-title { 
-      color: #fff; 
-      font-size: 1.8rem; 
-      font-weight: 800; 
-      text-align: center; 
+    .auth-title {
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-align: center;
     }
-    .auth-sub { 
-      color: rgba(255,255,255,0.5); 
-      text-align: center; 
-      margin-bottom: 2rem; 
+    .auth-sub {
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      margin-bottom: 2rem;
     }
     .form-group { margin-bottom: 1.2rem; }
-    .form-group label { 
-      display: block; 
-      color: rgba(255,255,255,0.7); 
-      margin-bottom: 0.4rem; 
-      font-size: 0.9rem; 
+    .form-group label {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
     }
     .input {
       width: 100%; background: rgba(255,255,255,0.06);
@@ -85,7 +85,7 @@ import { AuthService } from '../../services/auth.service.ts';
       margin-top: 1.5rem; font-size: 0.9rem;
     }
     .switch-link a { color: #ffd200; text-decoration: none; }
-  `] 
+  `]
 })
 
 export class RegisterComponent {
